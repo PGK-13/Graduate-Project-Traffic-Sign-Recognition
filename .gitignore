@@ -1,0 +1,48 @@
+# 数据集相关文件
+archive/
+GTSRB/
+
+# 模型文件
+models/
+*.pth
+*.onnx
+
+# 临时文件
+__pycache__/
+*.pyc
+
+# 日志文件
+*.log
+
+# IDE相关
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 操作系统相关
+.DS_Store
+Thumbs.db
+
+# 输出文件
+*.png
+*.jpg
+*.jpeg
+
+# 环境文件
+.env
+*.env
+requirements*.txt
+
+# 缓存文件
+.cache/
+.mplconfigdir/
+
+# 测试文件
+*.test.py
+*_test.py
+
+# 其他
+*.zip
+*.tar.gz
+*.rar
