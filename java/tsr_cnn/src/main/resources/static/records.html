@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>识别历史记录</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>交通标志识别系统</h1>
+        <nav>
+            <ul>
+                <li><a href="/">上传识别</a></li>
+                <li><a href="/records" class="active">历史记录</a></li>
+                <li><a href="/statistics">统计分析</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="records-section">
+            <h2>识别历史记录</h2>
+            <div class="records-container">
+                <table id="records-table">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>上传时间</th>
+                            <th>图像</th>
+                            <th>预测类别</th>
+                            <th>类别名称</th>
+                            <th>置信度</th>
+                            <th>IP地址</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 记录将通过 JavaScript 动态添加 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button id="prev-page" class="btn" disabled>上一页</button>
+                <span id="page-info">第 1 页，共 1 页</span>
+                <button id="next-page" class="btn" disabled>下一页</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 交通标志识别系统</p>
+    </footer>
+    
+    <script src="js/records.js"></script>
+</body>
+</html>

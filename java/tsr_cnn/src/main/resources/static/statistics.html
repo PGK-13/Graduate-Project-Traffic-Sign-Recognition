@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计分析</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>交通标志识别系统</h1>
+        <nav>
+            <ul>
+                <li><a href="/">上传识别</a></li>
+                <li><a href="/records">历史记录</a></li>
+                <li><a href="/statistics" class="active">统计分析</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="statistics-section">
+            <h2>统计分析</h2>
+            
+            <div class="overview-stats">
+                <h3>总体概览</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h4>总识别次数</h4>
+                        <p id="total-records">0</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>平均置信度</h4>
+                        <p id="avg-confidence">0%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="class-distribution">
+                <h3>类别分布</h3>
+                <div id="distribution-chart">
+                    <!-- 图表将通过 JavaScript 动态生成 -->
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 交通标志识别系统</p>
+    </footer>
+    
+    <script src="js/statistics.js"></script>
+</body>
+</html>

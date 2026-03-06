@@ -42,8 +42,8 @@ def export_model_to_onnx():
         dummy_input,
         ONNX_MODEL_PATH,
         export_params=True,
-        opset_version=11,
-        do_constant_folding=True,
+        opset_version=10,
+        do_constant_folding=False,
         input_names=['input'],
         output_names=['output'],
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}  # 支持动态批次

@@ -46,3 +46,15 @@ requirements*.txt
 *.zip
 *.tar.gz
 *.rar
+
+# Java相关
+java/**/target/
+java/**/.idea/
+java/**/*.iml
+java/**/*.class
+java/**/maven-status/
+
+# Maven相关
+java/**/.mvn/
+java/**/mvnw
+java/**/mvnw.cmd

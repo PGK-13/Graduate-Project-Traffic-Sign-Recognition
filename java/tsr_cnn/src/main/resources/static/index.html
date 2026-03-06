@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交通标志识别系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>交通标志识别系统</h1>
+        <nav>
+            <ul>
+                <li><a href="/" class="active">上传识别</a></li>
+                <li><a href="/records">历史记录</a></li>
+                <li><a href="/statistics">统计分析</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="upload-section">
+            <h2>上传交通标志图像</h2>
+            <div class="upload-container">
+                <div id="drop-area" class="drop-area">
+                    <div class="drop-content">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <p>点击或拖拽图像到此处上传</p>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        <button id="browse-btn" class="btn">浏览文件</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="result-section" class="result-section" style="display: none;">
+            <h2>识别结果</h2>
+            <div class="result-container">
+                <div class="result-image">
+                    <img id="preview-image" src="" alt="上传的图像">
+                </div>
+                <div class="result-info">
+                    <h3>识别结果</h3>
+                    <p><strong>预测类别：</strong><span id="predicted-class"></span></p>
+                    <p><strong>类别名称：</strong><span id="class-name"></span></p>
+                    <p><strong>置信度：</strong><span id="confidence"></span></p>
+                    <button id="new-upload" class="btn">重新上传</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 交通标志识别系统</p>
+    </footer>
+    
+    <script src="js/upload.js"></script>
+</body>
+</html>
