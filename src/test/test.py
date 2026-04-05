@@ -155,7 +155,7 @@ def predict_single_image(image_path, model_path, transform=None):
 
 if __name__ == "__main__":
     # 测试参数
-    MODEL_PATH = "./models/best_model_epoch_1_0.00.pth"  # 默认模型路径（训练后会更新）
+    MODEL_PATH = "/Users/zklee/pyProject/tsr_cnn/models/best_model_epoch_10_97.01.pth"  # 用户指定的模型路径
     DATASET_PATH = "/Users/zklee/pyProject/tsr_cnn/archive"  # 用户的数据集路径
     BATCH_SIZE = 64
     

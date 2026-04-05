@@ -54,8 +54,11 @@ CLASS_NAMES = {
     42: 'End of no passing by vehicles over 3.5 metric tons'
 }
 
-# 模型路径
-ONNX_MODEL_PATH = "./models/tsr_cnn.onnx"
+# 模型路径（从项目根目录计算）
+import os
+# api -> src -> 项目根目录
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ONNX_MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "tsr_cnn.onnx")
 
 # 输入尺寸
 INPUT_SIZE = (32, 32)

@@ -109,60 +109,6 @@ def main():
     # 创建推理示例
     print("\n创建ONNX推理示例")
     
-    # 使用样例代码
-    example_code = '''
-import onnxruntime as ort
-import numpy as np
-from PIL import Image
-from torchvision import transforms
-
-class ONNXTSRInference:
-    def __init__(self, onnx_model_path):
-        self.sess = ort.InferenceSession(onnx_model_path)
-        self.input_name = self.sess.get_inputs()[0].name
-        self.output_name = self.sess.get_outputs()[0].name
-        self.transform = transforms.Compose([
-            transforms.Resize((32, 32)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])
-    
-    def predict(self, image_path):
-        # 预处理
-        image = Image.open(image_path).convert('RGB')
-        image_tensor = self.transform(image).unsqueeze(0).numpy()
-        
-        # 推理
-        outputs = self.sess.run([self.output_name], {self.input_name: image_tensor})
-        logits = outputs[0]
-        
-        # 后处理
-        predicted_class = np.argmax(logits, axis=1)[0]
-        probabilities = np.exp(logits) / np.sum(np.exp(logits), axis=1, keepdims=True)
-        confidence = probabilities[0][predicted_class]
-        
-        return predicted_class, confidence
-
-# 使用示例
-if __name__ == "__main__":
-    # 初始化推理器
-    onnx_model_path = "./models/tsr_cnn.onnx"
-    inference = ONNXTSRInference(onnx_model_path)
-    
-    # 预测图像（替换为你的图像路径）
-    image_path = "path/to/your/image.jpg"
-    predicted_class, confidence = inference.predict(image_path)
-    
-    print(f"预测结果: 类别 {predicted_class}")
-    print(f"置信度: {confidence:.4f}")
-'''
-    
-    # 保存示例代码
-    with open("./models/onnx_inference_example.py", "w") as f:
-        f.write(example_code)
-    
-    print(f"ONNX Runtime推理示例已保存到: ./models/onnx_inference_example.py")
-    
     # 简单测试
     print("\n测试ONNX推理功能")
     try:

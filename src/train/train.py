@@ -25,8 +25,8 @@ def train_model(dataset_path, epochs=50, batch_size=64, learning_rate=0.001, sav
     train_dataset = GTSRB(dataset_path, train=True, transform=train_transforms)
     test_dataset = GTSRB(dataset_path, train=False, transform=test_transforms)
     
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     
     # 初始化模型
     model = LightweightTSRCNN(num_classes=43).to(device)
