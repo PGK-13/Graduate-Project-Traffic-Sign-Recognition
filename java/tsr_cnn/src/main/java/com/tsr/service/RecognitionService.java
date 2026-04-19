@@ -7,13 +7,13 @@ import com.tsr.util.ImageProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +150,7 @@ public class RecognitionService {
     /**
      * 获取识别记录列表
      */
-    public Page<RecognitionRecord> getRecords(Pageable pageable) {
+    public Page<RecognitionRecord> getRecords(@NonNull Pageable pageable) {
         return repository.findAll(pageable);
     }
     

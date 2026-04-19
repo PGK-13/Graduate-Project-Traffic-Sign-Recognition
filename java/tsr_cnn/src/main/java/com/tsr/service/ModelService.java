@@ -1,10 +1,6 @@
 package com.tsr.service;
 
-import com.tsr.util.ImageProcessor;
-import com.tsr.util.TrafficSignUtil;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,13 +13,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 @Service
 public class ModelService implements DisposableBean {
-    
+
     private RestTemplate restTemplate;
     
     // Flask 服务地址

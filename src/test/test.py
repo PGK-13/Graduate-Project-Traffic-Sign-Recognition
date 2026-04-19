@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Precision, Recall, F1Score
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 from src.model.model import LightweightTSRCNN
 from src.data.dataset import GTSRB, get_transforms
 
@@ -24,7 +25,8 @@ def test_model(model_path, dataset_path, batch_size=64, visualize=False):
     
     # 加载测试数据集
     test_dataset = GTSRB(dataset_path, train=False, transform=test_transforms)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    # 避免 macOS 上多进程共享内存权限问题
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     
     # 加载模型
     model = LightweightTSRCNN(num_classes=43).to(device)
@@ -94,18 +96,22 @@ def test_model(model_path, dataset_path, batch_size=64, visualize=False):
 
 def visualize_confusion_matrix(confusion_matrix, top_n=10):
     """可视化混淆矩阵的前top_n个类别"""
+    # 兼容中文显示（显式指定系统字体文件，避免字体回退失败）
+    font_path = "/System/Library/Fonts/PingFang.ttc"
+    cn_font = font_manager.FontProperties(fname=font_path)
+    plt.rcParams['axes.unicode_minus'] = False
     # 只显示前top_n个类别
     cm_subset = confusion_matrix[:top_n, :top_n]
     
     plt.figure(figsize=(12, 10))
     plt.imshow(cm_subset, interpolation='nearest', cmap=plt.cm.Blues)
-    plt.title(f'混淆矩阵（前{top_n}个类别）')
+    plt.title(f'混淆矩阵（前{top_n}个类别）', fontproperties=cn_font)
     plt.colorbar()
     
     classes = [str(i) for i in range(top_n)]
     tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
+    plt.xticks(tick_marks, classes, rotation=45, fontproperties=cn_font)
+    plt.yticks(tick_marks, classes, fontproperties=cn_font)
     
     # 在矩阵中显示数值
     fmt = 'd'
@@ -116,8 +122,8 @@ def visualize_confusion_matrix(confusion_matrix, top_n=10):
                     ha="center", va="center",
                     color="white" if cm_subset[i, j] > thresh else "black")
     
-    plt.ylabel('真实标签')
-    plt.xlabel('预测标签')
+    plt.ylabel('真实标签', fontproperties=cn_font)
+    plt.xlabel('预测标签', fontproperties=cn_font)
     plt.tight_layout()
     plt.savefig('confusion_matrix.png')
     print(f"混淆矩阵已保存到 confusion_matrix.png")
