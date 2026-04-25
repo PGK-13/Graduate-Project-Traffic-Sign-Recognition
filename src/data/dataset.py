@@ -9,7 +9,7 @@ import numpy as np
 class GTSRB(Dataset):
     def __init__(self, root_dir, train=True, transform=None):
         self.root_dir = root_dir
-        self.train = train
+        self.train = train # 是否是训练集
         self.transform = transform
         self.images = []
         self.labels = []
