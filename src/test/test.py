@@ -1,3 +1,5 @@
+import os
+import argparse
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -5,7 +7,7 @@ from torchmetrics import Accuracy, Precision, Recall, F1Score
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
-from src.model.model import LightweightTSRCNN
+from src.model import MODEL_REGISTRY
 from src.data.dataset import GTSRB, get_transforms
 
 # 设置设备
@@ -19,19 +21,22 @@ else:
     device = torch.device("cpu")
     print("使用 CPU 设备")
 
-def test_model(model_path, dataset_path, batch_size=64, visualize=False):
+def test_model(model_path, dataset_path, model_name='LightweightTSRCNN', batch_size=64, visualize=False):
     # 数据预处理
     _, test_transforms = get_transforms()
-    
+
     # 加载测试数据集
     test_dataset = GTSRB(dataset_path, train=False, transform=test_transforms)
     # 避免 macOS 上多进程共享内存权限问题
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
-    
-    # 加载模型
-    model = LightweightTSRCNN(num_classes=43).to(device)
+
+    # 加载模型（从注册表获取）
+    if model_name not in MODEL_REGISTRY:
+        raise ValueError(f"模型 '{model_name}' 未注册！可用模型: {list(MODEL_REGISTRY.keys())}")
+    model = MODEL_REGISTRY[model_name](num_classes=43).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
+    print(f"使用模型: {model_name}")
     
     # 初始化评估指标
     accuracy = Accuracy(task='multiclass', num_classes=43).to(device)
@@ -128,10 +133,10 @@ def visualize_confusion_matrix(confusion_matrix, top_n=10):
     plt.savefig('confusion_matrix.png')
     print(f"混淆矩阵已保存到 confusion_matrix.png")
 
-def predict_single_image(image_path, model_path, transform=None):
+def predict_single_image(image_path, model_path, model_name='LightweightTSRCNN', transform=None):
     """预测单张图像"""
     from PIL import Image
-    
+
     # 默认变换
     if transform is None:
         from torchvision import transforms
@@ -140,40 +145,52 @@ def predict_single_image(image_path, model_path, transform=None):
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
-    
+
     # 加载图像
     image = Image.open(image_path).convert('RGB')
     image_tensor = transform(image).unsqueeze(0).to(device)
-    
-    # 加载模型
-    model = LightweightTSRCNN(num_classes=43).to(device)
+
+    # 加载模型（从注册表获取）
+    if model_name not in MODEL_REGISTRY:
+        raise ValueError(f"模型 '{model_name}' 未注册！可用模型: {list(MODEL_REGISTRY.keys())}")
+    model = MODEL_REGISTRY[model_name](num_classes=43).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
-    
+
     # 预测
     with torch.no_grad():
         output = model(image_tensor)
         _, predicted = torch.max(output, 1)
         probabilities = torch.softmax(output, dim=1)
         confidence = probabilities[0][predicted].item()
-    
+
     return predicted.item(), confidence
 
 if __name__ == "__main__":
-    # 测试参数
-    MODEL_PATH = "/Users/zklee/pyProject/tsr_cnn/models/best_model_epoch_10_97.01.pth"  # 用户指定的模型路径
-    DATASET_PATH = "/Users/zklee/pyProject/tsr_cnn/archive"  # 用户的数据集路径
-    BATCH_SIZE = 64
-    
+    # 命令行参数解析
+    parser = argparse.ArgumentParser(description='测试交通标志识别模型')
+    parser.add_argument('--model', type=str, default='LightweightTSRCNN',
+                        choices=list(MODEL_REGISTRY.keys()),
+                        help='选择模型 (默认: LightweightTSRCNN)')
+    parser.add_argument('--checkpoint', type=str,
+                        default="/Users/zklee/pyProject/tsr_cnn/models/best_model_epoch_10_97.01.pth",
+                        help='模型文件路径')
+    parser.add_argument('--dataset', type=str, default="/Users/zklee/pyProject/tsr_cnn/archive",
+                        help='数据集路径')
+    parser.add_argument('--batch_size', type=int, default=64, help='批次大小 (默认: 64)')
+
+    args = parser.parse_args()
+
     try:
         # 测试整个测试集
-        results = test_model(MODEL_PATH, DATASET_PATH, BATCH_SIZE, visualize=True)
-        
-        # 示例：预测单张图像
-        # single_image_path = "path/to/test_image.jpg"
-        # predicted_class, confidence = predict_single_image(single_image_path, MODEL_PATH)
-        # print(f"单张图像预测结果: 类别 {predicted_class}, 置信度: {confidence:.4f}")
-        
+        results = test_model(
+            model_path=args.checkpoint,
+            dataset_path=args.dataset,
+            model_name=args.model,
+            batch_size=args.batch_size,
+            visualize=True
+        )
+
     except Exception as e:
         print(f"测试过程中出现错误: {e}")
         print("请确保模型路径和数据集路径正确。")
